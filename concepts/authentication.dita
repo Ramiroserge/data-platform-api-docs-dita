@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="authentication" xml:lang="en-us">
+  <title>Authentication</title>
+  <shortdesc>Authenticate requests using an API key sent in the <codeph>Authorization</codeph> header.</shortdesc>
+
+  <conbody>
+    <section>
+      <title>API key header</title>
+      <p>Send your API key as a Bearer token:</p>
+      <codeblock>Authorization: Bearer &lt;YOUR_API_KEY&gt;</codeblock>
+    </section>
+
+    <section>
+      <title>Additional headers</title>
+      <ul>
+        <li><b>Content-Type:</b> <codeph>application/json</codeph></li>
+        <li><b>Idempotency-Key:</b> recommended for POST/PUT operations</li>
+        <li><b>X-Request-Id:</b> optional client-generated correlation ID</li>
+      </ul>
+    </section>
+
+    <section>
+      <title>Idempotency</title>
+      <p>For create/update operations, provide an <codeph>Idempotency-Key</codeph> header to safely retry requests.</p>
+      <p>Keys are scoped to an endpoint and expire after 24 hours.</p>
+      <codeblock>Idempotency-Key: 6f8b5c5a-0d6c-4b7c-8a52-5b972e6b0b9b</codeblock>
+    </section>
+  </conbody>
+</concept>

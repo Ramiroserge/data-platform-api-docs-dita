@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="changelog" xml:lang="en-us">
+  <title>Changelog</title>
+  <shortdesc>Track changes to the documentation and API behavior.</shortdesc>
+
+  <refbody>
+    <section>
+      <title>Unreleased</title>
+      <ul>
+        <li>Initial starter documentation set.</li>
+      </ul>
+    </section>
+
+    <section>
+      <title>2026-02-15</title>
+      <ul>
+        <li>Created DITA starter kit (concepts, tasks, reference, ditamap).</li>
+      </ul>
+    </section>
+  </refbody>
+</reference>

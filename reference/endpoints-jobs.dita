@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="jobs-api-reference" xml:lang="en-us">
+  <title>Jobs API reference</title>
+  <shortdesc>Endpoints for creating, retrieving, and managing sync jobs.</shortdesc>
+  <refbody>
+
+    <section>
+      <title>Jobs endpoints</title>
+      <p>Jobs define sync configuration and reference source and target connectors.</p>
+    </section>
+
+    <section>
+      <title>List jobs</title>
+      <p><b>GET</b> <codeph>/v1/jobs</codeph></p>
+      <simpletable>
+        <sthead>
+          <stentry>Query parameter</stentry>
+          <stentry>Type</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>limit</stentry><stentry>integer</stentry><stentry>Max items (default 50, max 200).</stentry></strow>
+        <strow><stentry>cursor</stentry><stentry>string</stentry><stentry>Cursor for the next page.</stentry></strow>
+        <strow><stentry>sort</stentry><stentry>string</stentry><stentry>Sort by field:direction (for example, created_at:desc).</stentry></strow>
+      </simpletable>
+      <p><b>Example</b></p>
+      <codeblock>curl -s -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
+  "https://api.datasync.example.com/v1/jobs?limit=10"</codeblock>
+    </section>
+
+    <section>
+      <title>Get a job</title>
+      <p><b>GET</b> <codeph>/v1/jobs/{job_id}</codeph></p>
+      <p>Returns a single job by ID.</p>
+    </section>
+
+    <section>
+      <title>Create a job</title>
+      <p><b>POST</b> <codeph>/v1/jobs</codeph></p>
+      <p>Creates a job. Use <codeph>Idempotency-Key</codeph> for safe retries.</p>
+      <p><b>Required fields</b></p>
+      <ul>
+        <li><codeph>name</codeph></li>
+        <li><codeph>source_connector_id</codeph></li>
+        <li><codeph>target_connector_id</codeph></li>
+        <li><codeph>mappings</codeph></li>
+      </ul>
+    </section>
+
+    <section>
+      <title>Update a job</title>
+      <p><b>PUT</b> <codeph>/v1/jobs/{job_id}</codeph></p>
+      <p>Replaces the job configuration. Use <codeph>Idempotency-Key</codeph> for safe retries.</p>
+    </section>
+
+    <section>
+      <title>Delete a job</title>
+      <p><b>DELETE</b> <codeph>/v1/jobs/{job_id}</codeph></p>
+      <p>Deletes a job. Deleting a job does not delete historical runs.</p>
+    </section>
+
+    <section>
+      <title>Create a run for a job</title>
+      <p><b>POST</b> <codeph>/v1/jobs/{job_id}/runs</codeph></p>
+      <p>Starts an asynchronous run for the job. The response includes <codeph>run_id</codeph>.</p>
+    </section>
+
+  </refbody>
+</reference>

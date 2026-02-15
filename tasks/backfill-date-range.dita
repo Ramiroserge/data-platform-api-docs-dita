@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="backfill-date-range" xml:lang="en-us">
+  <title>Backfill a date range</title>
+  <shortdesc>Run a job over historical data for a specific time range.</shortdesc>
+
+  <taskbody>
+    <prereq>
+      <ul>
+        <li>You have a job ID (for example, <codeph>job_123</codeph>).</li>
+        <li>Your job is configured for incremental sync and supports a cursor field.</li>
+      </ul>
+    </prereq>
+
+    <steps>
+      <step>
+        <cmd>Create a backfill run specifying the time range.</cmd>
+        <codeblock>curl -s \
+  -X POST \
+  -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 9d2c1ef1-1a2f-4c69-bc3f-6f0cb6b8fd3a" \
+  -d '{
+    "reason": "backfill",
+    "mode": "backfill",
+    "backfill": {
+      "start": "2026-01-01T00:00:00Z",
+      "end":   "2026-01-31T23:59:59Z"
+    }
+  }' \
+  "https://api.datasync.example.com/v1/jobs/job_123/runs"</codeblock>
+      </step>
+
+      <step>
+        <cmd>Monitor the run until it completes.</cmd>
+        <info>
+          <p>Backfills can take longer than incremental runs. Consider a higher polling interval (for example, 30–60 seconds).</p>
+        </info>
+      </step>
+    </steps>
+
+    <result>
+      <p>The job has synchronized historical data for the specified range.</p>
+    </result>
+  </taskbody>
+</task>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="run-job-check-status" xml:lang="en-us">
+  <title>Run a job and check status</title>
+  <shortdesc>Create a run for a job and poll the run status until completion.</shortdesc>
+
+  <taskbody>
+    <prereq>
+      <ul>
+        <li>You have a job ID (for example, <codeph>job_123</codeph>).</li>
+      </ul>
+    </prereq>
+
+    <steps>
+      <step>
+        <cmd>Create a run for the job.</cmd>
+        <codeblock>curl -s \
+  -X POST \
+  -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 2b3c7c1e-7b39-4a2f-8b0e-0b3ad9f5a1c2" \
+  -d '{ "reason": "manual_trigger" }' \
+  "https://api.datasync.example.com/v1/jobs/job_123/runs"</codeblock>
+      </step>
+
+      <step>
+        <cmd>Copy the <codeph>run_id</codeph> from the response.</cmd>
+      </step>
+
+      <step>
+        <cmd>Poll the run resource to check status.</cmd>
+        <codeblock>curl -s \
+  -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
+  "https://api.datasync.example.com/v1/runs/run_456"</codeblock>
+        <info>
+          <p>Continue polling until <codeph>status</codeph> is <codeph>succeeded</codeph> or <codeph>failed</codeph>.</p>
+        </info>
+      </step>
+
+      <step>
+        <cmd>If the run fails, review the error details.</cmd>
+        <info>
+          <p>Inspect <codeph>error.code</codeph>, <codeph>error.message</codeph>, and <codeph>error.details</codeph>, then decide whether to replay the run.</p>
+        </info>
+      </step>
+    </steps>
+
+    <result>
+      <p>You can trigger runs and observe their progress.</p>
+    </result>
+  </taskbody>
+</task>

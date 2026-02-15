@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="quickstart-call-api" xml:lang="en-us">
+  <title>Quickstart: call the API</title>
+  <shortdesc>Make your first authenticated request and list jobs.</shortdesc>
+
+  <taskbody>
+    <prereq>
+      <ul>
+        <li>You have an API key.</li>
+        <li>You have a command-line tool such as curl installed.</li>
+      </ul>
+    </prereq>
+
+    <steps>
+      <step>
+        <cmd>Set your API key as an environment variable.</cmd>
+        <codeblock>export DATA_SYNC_API_KEY="YOUR_API_KEY"</codeblock>
+      </step>
+
+      <step>
+        <cmd>Call the jobs list endpoint.</cmd>
+        <codeblock>curl -s \
+  -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
+  -H "Accept: application/json" \
+  "https://api.datasync.example.com/v1/jobs?limit=10"</codeblock>
+      </step>
+
+      <step>
+        <cmd>Review the response.</cmd>
+        <info>
+          <p>You should see an array of jobs in <codeph>items</codeph> and an optional <codeph>next_cursor</codeph>.</p>
+        </info>
+      </step>
+    </steps>
+
+    <result>
+      <p>You have successfully authenticated and called the Data Sync Service API.</p>
+    </result>
+  </taskbody>
+</task>

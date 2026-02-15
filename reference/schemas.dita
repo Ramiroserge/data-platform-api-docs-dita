@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="schemas" xml:lang="en-us">
+  <title>Resource schemas</title>
+  <shortdesc>Representative JSON schemas for key API resources.</shortdesc>
+
+  <refbody>
+    <section>
+      <title>Job</title>
+      <codeblock>{
+  "id": "job_123",
+  "name": "orders_to_warehouse",
+  "source_connector_id": "conn_src_123",
+  "target_connector_id": "conn_tgt_456",
+  "sync_mode": "incremental",
+  "incremental": {
+    "cursor_field": "updated_at",
+    "cursor_format": "iso8601"
+  },
+  "mappings": [
+    {
+      "source": { "schema": "public", "table": "orders" },
+      "target": { "dataset": "analytics", "table": "orders" },
+      "write_disposition": "merge",
+      "primary_key": ["order_id"]
+    }
+  ],
+  "schedule": {
+    "type": "cron",
+    "expression": "0 */2 * * *"
+  },
+  "created_at": "2026-02-15T12:00:00Z",
+  "updated_at": "2026-02-15T12:00:00Z"
+}</codeblock>
+    </section>
+
+    <section>
+      <title>Run</title>
+      <codeblock>{
+  "id": "run_456",
+  "job_id": "job_123",
+  "status": "running",
+  "mode": "incremental",
+  "created_at": "2026-02-15T12:10:00Z",
+  "started_at": "2026-02-15T12:10:05Z",
+  "ended_at": null,
+  "metrics": {
+    "rows_read": 120034,
+    "rows_written": 119998,
+    "bytes_read": 987654321,
+    "duration_ms": 832112
+  },
+  "error": null
+}</codeblock>
+    </section>
+
+    <section>
+      <title>Connector</title>
+      <codeblock>{
+  "id": "conn_src_123",
+  "name": "orders_postgres",
+  "type": "postgres",
+  "config": {
+    "host": "db.example.internal",
+    "port": 5432,
+    "database": "app",
+    "schema": "public"
+  },
+  "created_at": "2026-02-15T11:50:00Z",
+  "updated_at": "2026-02-15T11:50:00Z"
+}</codeblock>
+      <p>Secrets are write-only and are not returned in responses.</p>
+    </section>
+
+    <section>
+      <title>Error</title>
+      <codeblock>{
+  "error": {
+    "code": "validation_error",
+    "message": "One or more fields are invalid.",
+    "details": [
+      { "field": "name", "issue": "must not be empty" }
+    ],
+    "request_id": "req_8a1d0c..."
+  }
+}</codeblock>
+    </section>
+
+    <section>
+      <title>List response</title>
+      <codeblock>{
+  "items": [ { /* resource */ } ],
+  "next_cursor": "eyJvZmZzZXQiOjUwfQ=="
+}</codeblock>
+    </section>
+  </refbody>
+</reference>

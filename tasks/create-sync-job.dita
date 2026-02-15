@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="create-sync-job" xml:lang="en-us">
+  <title>Create a sync job</title>
+  <shortdesc>Create a job that syncs a dataset from a source connector to a target connector.</shortdesc>
+
+  <taskbody>
+    <prereq>
+      <ul>
+        <li>You have created a source connector and a target connector.</li>
+        <li>You have their IDs (for example, <codeph>conn_src_123</codeph> and <codeph>conn_tgt_456</codeph>).</li>
+      </ul>
+    </prereq>
+
+    <steps>
+      <step>
+        <cmd>Create the job with a POST request.</cmd>
+        <codeblock>curl -s \
+  -X POST \
+  -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 0f3f77d8-cc4a-4d48-9c1f-81d5f6f2b88a" \
+  -d '{
+    "name": "orders_to_warehouse",
+    "source_connector_id": "conn_src_123",
+    "target_connector_id": "conn_tgt_456",
+    "sync_mode": "incremental",
+    "incremental": {
+      "cursor_field": "updated_at",
+      "cursor_format": "iso8601"
+    },
+    "mappings": [
+      {
+        "source": { "schema": "public", "table": "orders" },
+        "target": { "dataset": "analytics", "table": "orders" },
+        "write_disposition": "merge",
+        "primary_key": ["order_id"]
+      }
+    ],
+    "schedule": {
+      "type": "cron",
+      "expression": "0 */2 * * *"
+    }
+  }' \
+  "https://api.datasync.example.com/v1/jobs"</codeblock>
+      </step>
+
+      <step>
+        <cmd>Capture the <codeph>id</codeph> from the response.</cmd>
+        <info>
+          <p>You will use the job ID when creating runs.</p>
+        </info>
+      </step>
+    </steps>
+
+    <result>
+      <p>The job is created and ready to run.</p>
+    </result>
+  </taskbody>
+</task>

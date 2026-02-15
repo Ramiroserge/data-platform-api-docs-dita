@@ -1,0 +1,30 @@
+{
+  "name": "orders_to_warehouse",
+  "source_connector_id": "conn_src_123",
+  "target_connector_id": "conn_tgt_456",
+  "sync_mode": "incremental",
+  "incremental": {
+    "cursor_field": "updated_at",
+    "cursor_format": "iso8601"
+  },
+  "mappings": [
+    {
+      "source": {
+        "schema": "public",
+        "table": "orders"
+      },
+      "target": {
+        "dataset": "analytics",
+        "table": "orders"
+      },
+      "write_disposition": "merge",
+      "primary_key": [
+        "order_id"
+      ]
+    }
+  ],
+  "schedule": {
+    "type": "cron",
+    "expression": "0 */2 * * *"
+  }
+}

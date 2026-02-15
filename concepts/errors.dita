@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="errors" xml:lang="en-us">
+  <title>Error handling</title>
+  <shortdesc>The API returns standard HTTP status codes and a consistent JSON error body.</shortdesc>
+
+  <conbody>
+    <section>
+      <title>Status codes</title>
+      <ul>
+        <li><b>400</b> Bad request (invalid JSON, missing required fields)</li>
+        <li><b>401</b> Unauthorized (missing/invalid API key)</li>
+        <li><b>403</b> Forbidden (key lacks required permissions)</li>
+        <li><b>404</b> Not found (resource does not exist)</li>
+        <li><b>409</b> Conflict (idempotency conflict or invalid state transition)</li>
+        <li><b>422</b> Unprocessable entity (validation errors)</li>
+        <li><b>429</b> Too many requests (rate limit exceeded)</li>
+        <li><b>500</b> Internal server error</li>
+      </ul>
+    </section>
+
+    <section>
+      <title>Error response schema</title>
+      <p>Errors use a consistent JSON body:</p>
+      <codeblock>{
+  "error": {
+    "code": "validation_error",
+    "message": "One or more fields are invalid.",
+    "details": [
+      { "field": "name", "issue": "must not be empty" }
+    ],
+    "request_id": "req_8a1d0c..."
+  }
+}</codeblock>
+    </section>
+
+    <section>
+      <title>Rate limits and retries</title>
+      <p>On HTTP 429, respect <codeph>Retry-After</codeph> and apply exponential backoff with jitter.</p>
+    </section>
+  </conbody>
+</concept>

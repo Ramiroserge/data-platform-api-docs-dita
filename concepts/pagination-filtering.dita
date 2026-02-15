@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="pagination-filtering" xml:lang="en-us">
+  <title>Pagination and filtering</title>
+  <shortdesc>List endpoints support cursor pagination and basic filtering and sorting.</shortdesc>
+
+  <conbody>
+    <section>
+      <title>Cursor pagination</title>
+      <p>List endpoints return:</p>
+      <ul>
+        <li><codeph>items</codeph>: array of resources</li>
+        <li><codeph>next_cursor</codeph>: string cursor (or null)</li>
+      </ul>
+      <p>Use <codeph>limit</codeph> and <codeph>cursor</codeph> query parameters:</p>
+      <codeblock>GET /v1/jobs?limit=50&amp;cursor=eyJvZmZzZXQiOjUwfQ==</codeblock>
+    </section>
+
+    <section>
+      <title>Filtering</title>
+      <p>Filtering uses query parameters that match resource fields when supported. Example:</p>
+      <codeblock>GET /v1/runs?status=failed&amp;job_id=job_123</codeblock>
+    </section>
+
+    <section>
+      <title>Sorting</title>
+      <p>Sorting uses <codeph>sort</codeph> in the format <codeph>field:direction</codeph>:</p>
+      <codeblock>GET /v1/runs?sort=created_at:desc</codeblock>
+    </section>
+  </conbody>
+</concept>

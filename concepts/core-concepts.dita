@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="core-concepts" xml:lang="en-us">
+  <title>Core concepts</title>
+  <shortdesc>Understand the main resources used by the Data Sync Service API.</shortdesc>
+
+  <conbody>
+    <section>
+      <title>Connector</title>
+      <p>A connector represents credentials and configuration for a system you want to read from (source) or write to (target).</p>
+      <p>Examples: PostgreSQL, MySQL, BigQuery, Snowflake, S3, REST.</p>
+    </section>
+
+    <section>
+      <title>Job</title>
+      <p>A job defines <i>what</i> to sync: source, target, dataset/table mappings, incremental strategy, and schedule (optional).</p>
+      <p>Jobs are configuration objects and do not move data until you create a run.</p>
+    </section>
+
+    <section>
+      <title>Run</title>
+      <p>A run represents a single execution attempt of a job. Runs are asynchronous and have a lifecycle:</p>
+      <ul>
+        <li><codeph>queued</codeph> → <codeph>running</codeph> → <codeph>succeeded</codeph> | <codeph>failed</codeph> | <codeph>canceled</codeph></li>
+      </ul>
+      <p>Runs include metrics such as start/end timestamps, rows read/written, and error details (if any).</p>
+    </section>
+
+    <section>
+      <title>Backfill</title>
+      <p>A backfill run syncs historical data for a time range (for example, the last 30 days) rather than only the latest increment.</p>
+    </section>
+
+    <section>
+      <title>Replay</title>
+      <p>A replay run re-executes a previous run attempt, typically after fixing a transient issue (for example, credentials rotation).</p>
+    </section>
+  </conbody>
+</concept>

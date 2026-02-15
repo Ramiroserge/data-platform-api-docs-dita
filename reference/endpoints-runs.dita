@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="runs-api-reference" xml:lang="en-us">
+  <title>Runs API reference</title>
+  <shortdesc>Endpoints for listing, retrieving, canceling, and replaying runs.</shortdesc>
+  <refbody>
+
+    <section>
+      <title>Runs endpoints</title>
+      <p>Runs represent execution attempts of a job.</p>
+    </section>
+
+    <section>
+      <title>List runs</title>
+      <p><b>GET</b> <codeph>/v1/runs</codeph></p>
+      <simpletable>
+        <sthead>
+          <stentry>Query parameter</stentry>
+          <stentry>Type</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>limit</stentry><stentry>integer</stentry><stentry>Max items (default 50, max 200).</stentry></strow>
+        <strow><stentry>cursor</stentry><stentry>string</stentry><stentry>Cursor for the next page.</stentry></strow>
+        <strow><stentry>status</stentry><stentry>string</stentry><stentry>Filter by status (queued, running, succeeded, failed, canceled).</stentry></strow>
+        <strow><stentry>job_id</stentry><stentry>string</stentry><stentry>Filter by job ID.</stentry></strow>
+      </simpletable>
+    </section>
+
+    <section>
+      <title>Get a run</title>
+      <p><b>GET</b> <codeph>/v1/runs/{run_id}</codeph></p>
+      <p>Returns a run, including status, metrics, and error details (if any).</p>
+    </section>
+
+    <section>
+      <title>Cancel a run</title>
+      <p><b>POST</b> <codeph>/v1/runs/{run_id}/cancel</codeph></p>
+      <p>Attempts to cancel a run in <codeph>queued</codeph> or <codeph>running</codeph> state.</p>
+    </section>
+
+    <section>
+      <title>Replay a run</title>
+      <p><b>POST</b> <codeph>/v1/runs/{run_id}/replay</codeph></p>
+      <p>Creates a new run using the original run configuration.</p>
+    </section>
+
+    <section>
+      <title>Get run logs</title>
+      <p><b>GET</b> <codeph>/v1/runs/{run_id}/logs</codeph></p>
+      <p>Returns structured log lines. Use pagination for large logs.</p>
+    </section>
+
+  </refbody>
+</reference>

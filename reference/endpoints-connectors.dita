@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="connectors-api-reference" xml:lang="en-us">
+  <title>Connectors API reference</title>
+  <shortdesc>Endpoints for creating, retrieving, and managing connectors.</shortdesc>
+  <refbody>
+
+    <section>
+      <title>Connectors endpoints</title>
+      <p>Connectors store connection configuration for sources and targets.</p>
+    </section>
+
+    <section>
+      <title>List connectors</title>
+      <p><b>GET</b> <codeph>/v1/connectors</codeph></p>
+      <simpletable>
+        <sthead>
+          <stentry>Query parameter</stentry>
+          <stentry>Type</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>limit</stentry><stentry>integer</stentry><stentry>Max items (default 50, max 200).</stentry></strow>
+        <strow><stentry>cursor</stentry><stentry>string</stentry><stentry>Cursor for the next page.</stentry></strow>
+        <strow><stentry>type</stentry><stentry>string</stentry><stentry>Filter by type (postgres, mysql, bigquery, snowflake, s3, rest).</stentry></strow>
+      </simpletable>
+    </section>
+
+    <section>
+      <title>Create a connector</title>
+      <p><b>POST</b> <codeph>/v1/connectors</codeph></p>
+      <p>Creates a connector. Secrets are write-only and never returned in full.</p>
+      <p><b>Example</b></p>
+      <codeblock>{
+  "name": "warehouse_bigquery",
+  "type": "bigquery",
+  "config": {
+    "project_id": "my-project",
+    "dataset": "analytics",
+    "location": "US"
+  },
+  "secrets": {
+    "service_account_json": "..."
+  }
+}</codeblock>
+    </section>
+
+    <section>
+      <title>Get a connector</title>
+      <p><b>GET</b> <codeph>/v1/connectors/{connector_id}</codeph></p>
+    </section>
+
+    <section>
+      <title>Update a connector</title>
+      <p><b>PUT</b> <codeph>/v1/connectors/{connector_id}</codeph></p>
+      <p>Replaces the connector configuration. Use <codeph>Idempotency-Key</codeph> for safe retries.</p>
+    </section>
+
+    <section>
+      <title>Delete a connector</title>
+      <p><b>DELETE</b> <codeph>/v1/connectors/{connector_id}</codeph></p>
+    </section>
+
+    <section>
+      <title>Test a connector</title>
+      <p><b>POST</b> <codeph>/v1/connectors/{connector_id}/test</codeph></p>
+      <p>Validates credentials and connectivity, returning diagnostic results.</p>
+    </section>
+
+  </refbody>
+</reference>

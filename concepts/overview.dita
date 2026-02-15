@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="overview" xml:lang="en-us">
+  <title>Data Sync Service API overview</title>
+  <shortdesc>
+    The Data Sync Service API helps you define and run resilient sync jobs to move data from sources to targets (for example,
+    operational systems to a data warehouse) with observability, retries, and idempotency.
+  </shortdesc>
+
+  <conbody>
+    <section>
+      <title>Who this documentation is for</title>
+      <p>This documentation is intended for:</p>
+      <ul>
+        <li><b>Platform engineers</b> integrating the service into internal tooling.</li>
+        <li><b>Data engineers</b> creating and operating sync jobs.</li>
+        <li><b>Site reliability engineers</b> monitoring job runs and incidents.</li>
+      </ul>
+    </section>
+
+    <section>
+      <title>Base URL and versioning</title>
+      <p>All endpoints are prefixed with:</p>
+      <codeblock>https://api.datasync.example.com/v1</codeblock>
+      <p>Versioning uses a URI prefix (<codeph>/v1</codeph>). Breaking changes are introduced only in new major versions.</p>
+    </section>
+
+    <section>
+      <title>API design highlights</title>
+      <ul>
+        <li><b>Idempotent writes:</b> create and update operations support <codeph>Idempotency-Key</codeph>.</li>
+        <li><b>Async runs:</b> job execution is asynchronous; poll run status or subscribe to webhooks (optional).</li>
+        <li><b>Operational visibility:</b> runs include structured error details and timing metrics.</li>
+        <li><b>Rate limits:</b> consistent limits per API key; clients should implement backoff on HTTP 429.</li>
+      </ul>
+    </section>
+
+    <section>
+      <title>Example workflow</title>
+      <ol>
+        <li>Create a connector for a source system.</li>
+        <li>Create a connector for a target (warehouse).</li>
+        <li>Create a sync job referencing both connectors.</li>
+        <li>Run the job and monitor the run status.</li>
+        <li>Backfill or replay runs when needed.</li>
+      </ol>
+    </section>
+  </conbody>
+</concept>
