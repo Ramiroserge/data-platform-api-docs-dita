@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="data-sync-service-api-docs" xml:lang="en-us">
+  <booktitle>
+    <mainbooktitle>Data Sync Service API Documentation</mainbooktitle>
+  </booktitle>
+
+  <bookmeta>
+    <shortdesc>Starter DITA documentation set for a fictional ETL-style Data Sync Service API.</shortdesc>
+    <authorinformation>
+      <personinfo><namedetails><personname>
+        <firstname>Ramiro</firstname><lastname>Zahlouth</lastname>
+      </personname></namedetails></personinfo>
+    </authorinformation>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+  </bookmeta>
+
+  <frontmatter>
+    <!-- Conref warehouse — not rendered in output -->
+    <topicref href="shared/reusable-content.dita" processing-role="resource-only" />
+  </frontmatter>
+
+  <chapter navtitle="Overview">
+    <topicref href="concepts/overview.dita" />
+    <topicref href="concepts/core-concepts.dita" />
+  </chapter>
+
+  <chapter navtitle="Getting Started">
+    <topicref href="concepts/authentication.dita" />
+    <topicref href="tasks/quickstart-call-api.dita" />
+  </chapter>
+
+  <chapter navtitle="How-to Guides">
+    <topicref href="tasks/create-sync-job.dita" />
+    <topicref href="tasks/run-job-check-status.dita" />
+    <topicref href="tasks/backfill-date-range.dita" />
+    <topicref href="tasks/replay-failed-run.dita" />
+  </chapter>
+
+  <chapter navtitle="API Reference">
+    <topicref href="concepts/pagination-filtering.dita" />
+    <topicref href="concepts/errors.dita" />
+    <topicref href="reference/endpoints-jobs.dita" />
+    <topicref href="reference/endpoints-runs.dita" />
+    <topicref href="reference/endpoints-connectors.dita" />
+    <topicref href="reference/schemas.dita" />
+  </chapter>
+
+  <appendix navtitle="Appendix">
+    <topicref href="reference/changelog.dita" />
+  </appendix>
+</bookmap>

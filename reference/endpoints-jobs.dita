@@ -3,6 +3,22 @@
 <reference id="jobs-api-reference" xml:lang="en-us">
   <title>Jobs API reference</title>
   <shortdesc>Endpoints for creating, retrieving, and managing sync jobs.</shortdesc>
+
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>jobs</keyword>
+        <keyword>sync job</keyword>
+        <keyword>CRUD</keyword>
+        <keyword>schedule</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <refbody>
 
     <section>
@@ -23,47 +39,164 @@
         <strow><stentry>cursor</stentry><stentry>string</stentry><stentry>Cursor for the next page.</stentry></strow>
         <strow><stentry>sort</stentry><stentry>string</stentry><stentry>Sort by field:direction (for example, created_at:desc).</stentry></strow>
       </simpletable>
-      <p><b>Example</b></p>
+      <p><b>Example request</b></p>
       <codeblock>curl -s -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
   "https://api.datasync.example.com/v1/jobs?limit=10"</codeblock>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "items": [
+    {
+      "id": "job_123",
+      "name": "orders_to_warehouse",
+      "source_connector_id": "conn_src_123",
+      "target_connector_id": "conn_tgt_456",
+      "sync_mode": "incremental",
+      "created_at": "2026-02-15T12:00:00Z",
+      "updated_at": "2026-02-15T12:00:00Z"
+    }
+  ],
+  "next_cursor": null
+}</codeblock>
     </section>
 
     <section>
       <title>Get a job</title>
       <p><b>GET</b> <codeph>/v1/jobs/{job_id}</codeph></p>
       <p>Returns a single job by ID.</p>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "id": "job_123",
+  "name": "orders_to_warehouse",
+  "source_connector_id": "conn_src_123",
+  "target_connector_id": "conn_tgt_456",
+  "sync_mode": "incremental",
+  "incremental": {
+    "cursor_field": "updated_at",
+    "cursor_format": "iso8601"
+  },
+  "mappings": [
+    {
+      "source": { "schema": "public", "table": "orders" },
+      "target": { "dataset": "analytics", "table": "orders" },
+      "write_disposition": "merge",
+      "primary_key": ["order_id"]
+    }
+  ],
+  "schedule": {
+    "type": "cron",
+    "expression": "0 */2 * * *"
+  },
+  "created_at": "2026-02-15T12:00:00Z",
+  "updated_at": "2026-02-15T12:00:00Z"
+}</codeblock>
     </section>
 
     <section>
       <title>Create a job</title>
       <p><b>POST</b> <codeph>/v1/jobs</codeph></p>
-      <p>Creates a job. Use <codeph>Idempotency-Key</codeph> for safe retries.</p>
-      <p><b>Required fields</b></p>
-      <ul>
-        <li><codeph>name</codeph></li>
-        <li><codeph>source_connector_id</codeph></li>
-        <li><codeph>target_connector_id</codeph></li>
-        <li><codeph>mappings</codeph></li>
-      </ul>
+      <p>Creates a job. <ph conref="../shared/reusable-content.dita#reusable-content/idempotency-short"/></p>
+      <p><b>Request body fields</b></p>
+      <simpletable>
+        <sthead>
+          <stentry>Field</stentry>
+          <stentry>Type</stentry>
+          <stentry>Required</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>name</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>Display name for the job.</stentry></strow>
+        <strow><stentry>source_connector_id</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>ID of the source connector.</stentry></strow>
+        <strow><stentry>target_connector_id</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>ID of the target connector.</stentry></strow>
+        <strow><stentry>sync_mode</stentry><stentry>string</stentry><stentry>No</stentry><stentry>Sync strategy: <codeph>incremental</codeph> (default) or <codeph>full</codeph>.</stentry></strow>
+        <strow><stentry>incremental</stentry><stentry>object</stentry><stentry>No</stentry><stentry>Cursor settings when <codeph>sync_mode</codeph> is <codeph>incremental</codeph>.</stentry></strow>
+        <strow><stentry>mappings</stentry><stentry>array</stentry><stentry>Yes</stentry><stentry>One or more source-to-target table mappings.</stentry></strow>
+        <strow><stentry>schedule</stentry><stentry>object</stentry><stentry>No</stentry><stentry>Optional cron schedule for automated runs.</stentry></strow>
+      </simpletable>
+      <p><b>Request body example</b></p>
+      <codeblock><coderef href="../assets/examples/job-create.json"/></codeblock>
+      <p><b>Response</b> — <codeph>201 Created</codeph></p>
+      <p>Returns the created job object, including the generated <codeph>id</codeph>.</p>
     </section>
 
     <section>
       <title>Update a job</title>
       <p><b>PUT</b> <codeph>/v1/jobs/{job_id}</codeph></p>
-      <p>Replaces the job configuration. Use <codeph>Idempotency-Key</codeph> for safe retries.</p>
+      <p>Replaces the job configuration. <ph conref="../shared/reusable-content.dita#reusable-content/idempotency-short"/></p>
+      <p><b>Request body fields</b></p>
+      <simpletable>
+        <sthead>
+          <stentry>Field</stentry>
+          <stentry>Type</stentry>
+          <stentry>Required</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>name</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>Display name for the job.</stentry></strow>
+        <strow><stentry>source_connector_id</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>ID of the source connector.</stentry></strow>
+        <strow><stentry>target_connector_id</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>ID of the target connector.</stentry></strow>
+        <strow><stentry>sync_mode</stentry><stentry>string</stentry><stentry>No</stentry><stentry>Sync strategy: <codeph>incremental</codeph> (default) or <codeph>full</codeph>.</stentry></strow>
+        <strow><stentry>incremental</stentry><stentry>object</stentry><stentry>No</stentry><stentry>Cursor settings when <codeph>sync_mode</codeph> is <codeph>incremental</codeph>.</stentry></strow>
+        <strow><stentry>mappings</stentry><stentry>array</stentry><stentry>Yes</stentry><stentry>One or more source-to-target table mappings.</stentry></strow>
+        <strow><stentry>schedule</stentry><stentry>object</stentry><stentry>No</stentry><stentry>Optional cron schedule for automated runs.</stentry></strow>
+      </simpletable>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <p>Returns the updated job object.</p>
     </section>
 
     <section>
       <title>Delete a job</title>
       <p><b>DELETE</b> <codeph>/v1/jobs/{job_id}</codeph></p>
-      <p>Deletes a job. Deleting a job does not delete historical runs.</p>
+      <p>Deletes a job.</p>
+      <note type="caution">Deleting a job does not delete its historical runs. Run records remain available for
+        auditing and can still be queried via the Runs API.</note>
+      <p><b>Response</b> — <codeph>204 No Content</codeph></p>
+      <p>Returns an empty body on success.</p>
     </section>
 
     <section>
       <title>Create a run for a job</title>
       <p><b>POST</b> <codeph>/v1/jobs/{job_id}/runs</codeph></p>
       <p>Starts an asynchronous run for the job. The response includes <codeph>run_id</codeph>.</p>
+      <p><b>Request body fields</b></p>
+      <simpletable>
+        <sthead>
+          <stentry>Field</stentry>
+          <stentry>Type</stentry>
+          <stentry>Required</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>reason</stentry><stentry>string</stentry><stentry>No</stentry><stentry>Human-readable reason for the run (for example, <codeph>manual_trigger</codeph>).</stentry></strow>
+        <strow><stentry>mode</stentry><stentry>string</stentry><stentry>No</stentry><stentry>Run mode: <codeph>incremental</codeph> (default) or <codeph>backfill</codeph>.</stentry></strow>
+        <strow><stentry>backfill</stentry><stentry>object</stentry><stentry>Conditional</stentry><stentry>Required when <codeph>mode</codeph> is <codeph>backfill</codeph>. Contains <codeph>start</codeph> and <codeph>end</codeph> ISO 8601 timestamps.</stentry></strow>
+      </simpletable>
+      <p><b>Request body example</b></p>
+      <codeblock><coderef href="../assets/examples/run-create.json"/></codeblock>
+      <p><b>Response</b> — <codeph>202 Accepted</codeph></p>
+      <codeblock>{
+  "id": "run_789",
+  "job_id": "job_123",
+  "status": "queued",
+  "mode": "incremental",
+  "created_at": "2026-02-15T14:00:00Z",
+  "started_at": null,
+  "ended_at": null,
+  "metrics": null,
+  "error": null
+}</codeblock>
     </section>
 
   </refbody>
+
+  <related-links>
+    <link href="../concepts/core-concepts.dita">
+      <linktext>Core concepts</linktext>
+    </link>
+    <link href="../tasks/create-sync-job.dita">
+      <linktext>Create a sync job</linktext>
+    </link>
+    <link href="../tasks/run-job-check-status.dita">
+      <linktext>Run a job and check status</linktext>
+    </link>
+    <link href="schemas.dita">
+      <linktext>Resource schemas</linktext>
+    </link>
+  </related-links>
 </reference>

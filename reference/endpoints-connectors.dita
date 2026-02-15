@@ -3,6 +3,22 @@
 <reference id="connectors-api-reference" xml:lang="en-us">
   <title>Connectors API reference</title>
   <shortdesc>Endpoints for creating, retrieving, and managing connectors.</shortdesc>
+
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>connectors</keyword>
+        <keyword>source</keyword>
+        <keyword>target</keyword>
+        <keyword>credentials</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <refbody>
 
     <section>
@@ -23,13 +39,47 @@
         <strow><stentry>cursor</stentry><stentry>string</stentry><stentry>Cursor for the next page.</stentry></strow>
         <strow><stentry>type</stentry><stentry>string</stentry><stentry>Filter by type (postgres, mysql, bigquery, snowflake, s3, rest).</stentry></strow>
       </simpletable>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "items": [
+    {
+      "id": "conn_src_123",
+      "name": "orders_postgres",
+      "type": "postgres",
+      "config": {
+        "host": "db.example.internal",
+        "port": 5432,
+        "database": "app",
+        "schema": "public"
+      },
+      "created_at": "2026-02-15T11:50:00Z",
+      "updated_at": "2026-02-15T11:50:00Z"
+    }
+  ],
+  "next_cursor": "eyJvZmZzZXQiOjUwfQ=="
+}</codeblock>
     </section>
 
     <section>
       <title>Create a connector</title>
       <p><b>POST</b> <codeph>/v1/connectors</codeph></p>
       <p>Creates a connector. Secrets are write-only and never returned in full.</p>
-      <p><b>Example</b></p>
+      <note type="restriction">Secret values (such as passwords and service account keys) are stored encrypted and
+        are never included in API responses. To rotate a secret, update the connector with the new value.</note>
+      <p><b>Request body fields</b></p>
+      <simpletable>
+        <sthead>
+          <stentry>Field</stentry>
+          <stentry>Type</stentry>
+          <stentry>Required</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>name</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>Display name for the connector.</stentry></strow>
+        <strow><stentry>type</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>Connector type (postgres, mysql, bigquery, snowflake, s3, rest).</stentry></strow>
+        <strow><stentry>config</stentry><stentry>object</stentry><stentry>Yes</stentry><stentry>Type-specific connection settings (host, port, dataset, etc.).</stentry></strow>
+        <strow><stentry>secrets</stentry><stentry>object</stentry><stentry>Yes</stentry><stentry>Write-only credentials (passwords, service account keys).</stentry></strow>
+      </simpletable>
+      <p><b>Request body example</b></p>
       <codeblock>{
   "name": "warehouse_bigquery",
   "type": "bigquery",
@@ -42,29 +92,97 @@
     "service_account_json": "..."
   }
 }</codeblock>
+      <p><b>Response</b> — <codeph>201 Created</codeph></p>
+      <codeblock>{
+  "id": "conn_tgt_789",
+  "name": "warehouse_bigquery",
+  "type": "bigquery",
+  "config": {
+    "project_id": "my-project",
+    "dataset": "analytics",
+    "location": "US"
+  },
+  "created_at": "2026-02-15T14:22:00Z",
+  "updated_at": "2026-02-15T14:22:00Z"
+}</codeblock>
     </section>
 
     <section>
       <title>Get a connector</title>
       <p><b>GET</b> <codeph>/v1/connectors/{connector_id}</codeph></p>
+      <p>Returns a single connector by ID.</p>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "id": "conn_src_123",
+  "name": "orders_postgres",
+  "type": "postgres",
+  "config": {
+    "host": "db.example.internal",
+    "port": 5432,
+    "database": "app",
+    "schema": "public"
+  },
+  "created_at": "2026-02-15T11:50:00Z",
+  "updated_at": "2026-02-15T11:50:00Z"
+}</codeblock>
     </section>
 
     <section>
       <title>Update a connector</title>
       <p><b>PUT</b> <codeph>/v1/connectors/{connector_id}</codeph></p>
-      <p>Replaces the connector configuration. Use <codeph>Idempotency-Key</codeph> for safe retries.</p>
+      <p>Replaces the connector configuration. <ph conref="../shared/reusable-content.dita#reusable-content/idempotency-short"/></p>
+      <p><b>Request body fields</b></p>
+      <simpletable>
+        <sthead>
+          <stentry>Field</stentry>
+          <stentry>Type</stentry>
+          <stentry>Required</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>name</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>Display name for the connector.</stentry></strow>
+        <strow><stentry>type</stentry><stentry>string</stentry><stentry>Yes</stentry><stentry>Connector type (must match the original type).</stentry></strow>
+        <strow><stentry>config</stentry><stentry>object</stentry><stentry>Yes</stentry><stentry>Type-specific connection settings.</stentry></strow>
+        <strow><stentry>secrets</stentry><stentry>object</stentry><stentry>No</stentry><stentry>Omit to keep existing secrets; include to replace them.</stentry></strow>
+      </simpletable>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <p>Returns the updated connector object.</p>
     </section>
 
     <section>
       <title>Delete a connector</title>
       <p><b>DELETE</b> <codeph>/v1/connectors/{connector_id}</codeph></p>
+      <p><b>Response</b> — <codeph>204 No Content</codeph></p>
+      <p>Returns an empty body on success.</p>
     </section>
 
     <section>
       <title>Test a connector</title>
       <p><b>POST</b> <codeph>/v1/connectors/{connector_id}/test</codeph></p>
       <p>Validates credentials and connectivity, returning diagnostic results.</p>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "connector_id": "conn_src_123",
+  "status": "reachable",
+  "latency_ms": 42,
+  "checked_at": "2026-02-15T14:30:00Z",
+  "details": {
+    "server_version": "PostgreSQL 15.4",
+    "ssl": true
+  }
+}</codeblock>
     </section>
 
   </refbody>
+
+  <related-links>
+    <link href="../concepts/core-concepts.dita">
+      <linktext>Core concepts</linktext>
+    </link>
+    <link href="../tasks/create-sync-job.dita">
+      <linktext>Create a sync job</linktext>
+    </link>
+    <link href="schemas.dita">
+      <linktext>Resource schemas</linktext>
+    </link>
+  </related-links>
 </reference>

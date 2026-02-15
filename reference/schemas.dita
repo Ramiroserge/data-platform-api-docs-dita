@@ -4,6 +4,21 @@
   <title>Resource schemas</title>
   <shortdesc>Representative JSON schemas for key API resources.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>schema</keyword>
+        <keyword>JSON</keyword>
+        <keyword>data model</keyword>
+        <keyword>resource</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <refbody>
     <section>
       <title>Job</title>
@@ -74,16 +89,7 @@
 
     <section>
       <title>Error</title>
-      <codeblock>{
-  "error": {
-    "code": "validation_error",
-    "message": "One or more fields are invalid.",
-    "details": [
-      { "field": "name", "issue": "must not be empty" }
-    ],
-    "request_id": "req_8a1d0c..."
-  }
-}</codeblock>
+      <codeblock conref="../shared/reusable-content.dita#reusable-content/error-response-json"/>
     </section>
 
     <section>
@@ -94,4 +100,19 @@
 }</codeblock>
     </section>
   </refbody>
+
+  <related-links>
+    <link href="endpoints-jobs.dita">
+      <linktext>Jobs API reference</linktext>
+    </link>
+    <link href="endpoints-runs.dita">
+      <linktext>Runs API reference</linktext>
+    </link>
+    <link href="endpoints-connectors.dita">
+      <linktext>Connectors API reference</linktext>
+    </link>
+    <link href="../concepts/errors.dita">
+      <linktext>Error handling</linktext>
+    </link>
+  </related-links>
 </reference>

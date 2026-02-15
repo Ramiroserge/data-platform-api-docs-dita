@@ -4,16 +4,45 @@
   <title>Changelog</title>
   <shortdesc>Track changes to the documentation and API behavior.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>changelog</keyword>
+        <keyword>release notes</keyword>
+        <keyword>version history</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <refbody>
     <section>
-      <title>Unreleased</title>
+      <title>2026-02-15 — v0.3</title>
       <ul>
-        <li>Initial starter documentation set.</li>
+        <li>Added <codeph>&lt;prolog&gt;</codeph> metadata (author, dates, keywords) to all 15 topics.</li>
+        <li>Added inline <codeph>&lt;xref&gt;</codeph> cross-references throughout body text for contextual navigation.</li>
+        <li>Wired orphaned <codeph>assets/examples/</codeph> JSON files into endpoint references via <codeph>&lt;coderef&gt;</codeph>.</li>
       </ul>
     </section>
 
     <section>
-      <title>2026-02-15</title>
+      <title>2026-02-15 — v0.2</title>
+      <ul>
+        <li>Added <codeph>&lt;related-links&gt;</codeph> to all 14 key topics for end-of-topic navigation.</li>
+        <li>Added response examples (with HTTP status codes) to every endpoint in the three reference files.</li>
+        <li>Created <codeph>shared/reusable-content.dita</codeph> conref warehouse with base URL, idempotency, and error response fragments.</li>
+        <li>Applied conref reuse across 5 topics (<codeph>&lt;codeblock&gt;</codeph>, <codeph>&lt;p&gt;</codeph>, and <codeph>&lt;ph&gt;</codeph> patterns).</li>
+        <li>Added <codeph>&lt;note&gt;</codeph> elements (tip, important, remember, restriction, caution) across 7 files.</li>
+        <li>Added <codeph>&lt;context&gt;</codeph> to all 5 task topics explaining when and why to perform each task.</li>
+        <li>Standardized endpoint parameter documentation: consistent <codeph>&lt;simpletable&gt;</codeph> format for query parameters (3 columns) and request body fields (4 columns).</li>
+      </ul>
+    </section>
+
+    <section>
+      <title>2026-02-15 — v0.1</title>
       <ul>
         <li>Created DITA starter kit (concepts, tasks, reference, ditamap).</li>
       </ul>

@@ -4,6 +4,21 @@
   <title>Create a sync job</title>
   <shortdesc>Create a job that syncs a dataset from a source connector to a target connector.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>create job</keyword>
+        <keyword>sync job</keyword>
+        <keyword>mapping</keyword>
+        <keyword>incremental sync</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <taskbody>
     <prereq>
       <ul>
@@ -12,10 +27,16 @@
       </ul>
     </prereq>
 
+    <context>
+      <p>A job ties a source connector to a target connector and defines which tables or datasets to sync.
+        Once the job exists it does not move data on its own — you must <xref href="run-job-check-status.dita">create a run</xref> to trigger execution.
+        Use this task after you have set up at least one source and one target connector.</p>
+    </context>
+
     <steps>
       <step>
         <cmd>Create the job with a POST request.</cmd>
-        <codeblock>curl -s \
+        <info><codeblock>curl -s \
   -X POST \
   -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
   -H "Content-Type: application/json" \
@@ -42,13 +63,15 @@
       "expression": "0 */2 * * *"
     }
   }' \
-  "https://api.datasync.example.com/v1/jobs"</codeblock>
+  "https://api.datasync.example.com/v1/jobs"</codeblock></info>
       </step>
 
       <step>
         <cmd>Capture the <codeph>id</codeph> from the response.</cmd>
         <info>
           <p>You will use the job ID when creating runs.</p>
+          <note type="tip">Save the job ID in a variable for use in subsequent commands:
+            <codeblock>JOB_ID=$(echo "$RESPONSE" | jq -r '.id')</codeblock></note>
         </info>
       </step>
     </steps>
@@ -57,4 +80,19 @@
       <p>The job is created and ready to run.</p>
     </result>
   </taskbody>
+
+  <related-links>
+    <link href="../concepts/core-concepts.dita">
+      <linktext>Core concepts</linktext>
+    </link>
+    <link href="../reference/endpoints-jobs.dita">
+      <linktext>Jobs API reference</linktext>
+    </link>
+    <link href="../reference/schemas.dita">
+      <linktext>Resource schemas</linktext>
+    </link>
+    <link href="run-job-check-status.dita">
+      <linktext>Run a job and check status</linktext>
+    </link>
+  </related-links>
 </task>

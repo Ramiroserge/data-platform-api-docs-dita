@@ -3,6 +3,23 @@
 <reference id="runs-api-reference" xml:lang="en-us">
   <title>Runs API reference</title>
   <shortdesc>Endpoints for listing, retrieving, canceling, and replaying runs.</shortdesc>
+
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>runs</keyword>
+        <keyword>execution</keyword>
+        <keyword>cancel</keyword>
+        <keyword>replay</keyword>
+        <keyword>logs</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <refbody>
 
     <section>
@@ -24,31 +41,158 @@
         <strow><stentry>status</stentry><stentry>string</stentry><stentry>Filter by status (queued, running, succeeded, failed, canceled).</stentry></strow>
         <strow><stentry>job_id</stentry><stentry>string</stentry><stentry>Filter by job ID.</stentry></strow>
       </simpletable>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "items": [
+    {
+      "id": "run_456",
+      "job_id": "job_123",
+      "status": "succeeded",
+      "mode": "incremental",
+      "created_at": "2026-02-15T12:10:00Z",
+      "started_at": "2026-02-15T12:10:05Z",
+      "ended_at": "2026-02-15T12:24:00Z",
+      "metrics": {
+        "rows_read": 120034,
+        "rows_written": 119998,
+        "bytes_read": 987654321,
+        "duration_ms": 832112
+      },
+      "error": null
+    }
+  ],
+  "next_cursor": null
+}</codeblock>
     </section>
 
     <section>
       <title>Get a run</title>
       <p><b>GET</b> <codeph>/v1/runs/{run_id}</codeph></p>
       <p>Returns a run, including status, metrics, and error details (if any).</p>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "id": "run_456",
+  "job_id": "job_123",
+  "status": "failed",
+  "mode": "incremental",
+  "created_at": "2026-02-15T12:10:00Z",
+  "started_at": "2026-02-15T12:10:05Z",
+  "ended_at": "2026-02-15T12:12:30Z",
+  "metrics": {
+    "rows_read": 5200,
+    "rows_written": 0,
+    "bytes_read": 41943040,
+    "duration_ms": 145000
+  },
+  "error": {
+    "code": "target_write_error",
+    "message": "Permission denied on dataset analytics.",
+    "details": []
+  }
+}</codeblock>
     </section>
 
     <section>
       <title>Cancel a run</title>
       <p><b>POST</b> <codeph>/v1/runs/{run_id}/cancel</codeph></p>
       <p>Attempts to cancel a run in <codeph>queued</codeph> or <codeph>running</codeph> state.</p>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "id": "run_456",
+  "job_id": "job_123",
+  "status": "canceled",
+  "mode": "incremental",
+  "created_at": "2026-02-15T12:10:00Z",
+  "started_at": "2026-02-15T12:10:05Z",
+  "ended_at": "2026-02-15T12:11:00Z",
+  "metrics": {
+    "rows_read": 800,
+    "rows_written": 0,
+    "bytes_read": 6553600,
+    "duration_ms": 55000
+  },
+  "error": null
+}</codeblock>
     </section>
 
     <section>
       <title>Replay a run</title>
       <p><b>POST</b> <codeph>/v1/runs/{run_id}/replay</codeph></p>
       <p>Creates a new run using the original run configuration.</p>
+      <p><b>Request body fields</b></p>
+      <simpletable>
+        <sthead>
+          <stentry>Field</stentry>
+          <stentry>Type</stentry>
+          <stentry>Required</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>reason</stentry><stentry>string</stentry><stentry>No</stentry><stentry>Human-readable reason for the replay (for example, <codeph>replay_after_fix</codeph>).</stentry></strow>
+      </simpletable>
+      <p><b>Response</b> — <codeph>202 Accepted</codeph></p>
+      <codeblock>{
+  "id": "run_790",
+  "job_id": "job_123",
+  "status": "queued",
+  "mode": "incremental",
+  "replay_of": "run_456",
+  "created_at": "2026-02-15T15:00:00Z",
+  "started_at": null,
+  "ended_at": null,
+  "metrics": null,
+  "error": null
+}</codeblock>
     </section>
 
     <section>
       <title>Get run logs</title>
       <p><b>GET</b> <codeph>/v1/runs/{run_id}/logs</codeph></p>
       <p>Returns structured log lines. Use pagination for large logs.</p>
+      <simpletable>
+        <sthead>
+          <stentry>Query parameter</stentry>
+          <stentry>Type</stentry>
+          <stentry>Description</stentry>
+        </sthead>
+        <strow><stentry>limit</stentry><stentry>integer</stentry><stentry>Max items (default 100, max 1000).</stentry></strow>
+        <strow><stentry>cursor</stentry><stentry>string</stentry><stentry>Cursor for the next page.</stentry></strow>
+        <strow><stentry>level</stentry><stentry>string</stentry><stentry>Filter by log level (debug, info, warn, error).</stentry></strow>
+      </simpletable>
+      <p><b>Response</b> — <codeph>200 OK</codeph></p>
+      <codeblock>{
+  "items": [
+    {
+      "timestamp": "2026-02-15T12:10:05Z",
+      "level": "info",
+      "message": "Run started. Reading from source connector conn_src_123."
+    },
+    {
+      "timestamp": "2026-02-15T12:12:30Z",
+      "level": "error",
+      "message": "Permission denied on dataset analytics."
+    }
+  ],
+  "next_cursor": null
+}</codeblock>
     </section>
 
   </refbody>
+
+  <related-links>
+    <link href="../concepts/core-concepts.dita">
+      <linktext>Core concepts</linktext>
+    </link>
+    <link href="../tasks/run-job-check-status.dita">
+      <linktext>Run a job and check status</linktext>
+    </link>
+    <link href="../tasks/backfill-date-range.dita">
+      <linktext>Backfill a date range</linktext>
+    </link>
+    <link href="../tasks/replay-failed-run.dita">
+      <linktext>Replay a failed run</linktext>
+    </link>
+    <link href="schemas.dita">
+      <linktext>Resource schemas</linktext>
+    </link>
+  </related-links>
 </reference>

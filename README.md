@@ -5,10 +5,11 @@ This folder contains a small, interview-ready DITA documentation set for a ficti
 
 ## Folder layout
 
-- `maps/` — entrypoint DITA map
+- `api-docs.ditamap` — entrypoint DITA bookmap (project root)
 - `concepts/` — overview, authentication, errors, pagination, and core concepts
 - `tasks/` — step-by-step how-to topics (quickstart, create job, run job, backfill, replay)
 - `reference/` — endpoint reference topics and resource schemas
+- `shared/` — conref warehouse topic for reusable content fragments
 - `assets/examples/` — example JSON payloads used by the docs
 
 ## Build/view options
@@ -16,7 +17,7 @@ This folder contains a small, interview-ready DITA documentation set for a ficti
 If you have a DITA toolchain (DITA-OT), you can build HTML output with a command like:
 
 ```bash
-dita -i maps/api-docs.ditamap -f html5 -o out
+dita -i api-docs.ditamap -f html5 -o out
 ```
 
 (Exact commands can vary depending on your DITA-OT installation.)

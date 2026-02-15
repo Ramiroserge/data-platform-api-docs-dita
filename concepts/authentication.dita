@@ -4,6 +4,21 @@
   <title>Authentication</title>
   <shortdesc>Authenticate requests using an API key sent in the <codeph>Authorization</codeph> header.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>authentication</keyword>
+        <keyword>API key</keyword>
+        <keyword>Bearer token</keyword>
+        <keyword>idempotency</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <conbody>
     <section>
       <title>API key header</title>
@@ -22,9 +37,19 @@
 
     <section>
       <title>Idempotency</title>
-      <p>For create/update operations, provide an <codeph>Idempotency-Key</codeph> header to safely retry requests.</p>
-      <p>Keys are scoped to an endpoint and expire after 24 hours.</p>
+      <p conref="../shared/reusable-content.dita#reusable-content/idempotency-description"/>
       <codeblock>Idempotency-Key: 6f8b5c5a-0d6c-4b7c-8a52-5b972e6b0b9b</codeblock>
+      <note type="important">Store the idempotency key on the client side before sending the request so you can
+        retry with the same key if the network connection drops.</note>
     </section>
   </conbody>
+
+  <related-links>
+    <link href="../tasks/quickstart-call-api.dita">
+      <linktext>Quickstart: call the API</linktext>
+    </link>
+    <link href="errors.dita">
+      <linktext>Error handling</linktext>
+    </link>
+  </related-links>
 </concept>

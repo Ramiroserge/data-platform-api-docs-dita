@@ -4,6 +4,21 @@
   <title>Run a job and check status</title>
   <shortdesc>Create a run for a job and poll the run status until completion.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>run</keyword>
+        <keyword>trigger</keyword>
+        <keyword>poll status</keyword>
+        <keyword>monitoring</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <taskbody>
     <prereq>
       <ul>
@@ -11,16 +26,23 @@
       </ul>
     </prereq>
 
+    <context>
+      <p>Runs are asynchronous — creating a run queues the job for execution and returns immediately.
+        You then poll the run resource until it reaches a terminal state (<codeph>succeeded</codeph>,
+        <codeph>failed</codeph>, or <codeph>canceled</codeph>). Use this task whenever you need to
+        trigger a sync manually or verify that a scheduled run completed successfully.</p>
+    </context>
+
     <steps>
       <step>
         <cmd>Create a run for the job.</cmd>
-        <codeblock>curl -s \
+        <info><codeblock>curl -s \
   -X POST \
   -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: 2b3c7c1e-7b39-4a2f-8b0e-0b3ad9f5a1c2" \
   -d '{ "reason": "manual_trigger" }' \
-  "https://api.datasync.example.com/v1/jobs/job_123/runs"</codeblock>
+  "https://api.datasync.example.com/v1/jobs/job_123/runs"</codeblock></info>
       </step>
 
       <step>
@@ -29,10 +51,10 @@
 
       <step>
         <cmd>Poll the run resource to check status.</cmd>
-        <codeblock>curl -s \
+        <info>
+          <codeblock>curl -s \
   -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
   "https://api.datasync.example.com/v1/runs/run_456"</codeblock>
-        <info>
           <p>Continue polling until <codeph>status</codeph> is <codeph>succeeded</codeph> or <codeph>failed</codeph>.</p>
         </info>
       </step>
@@ -40,7 +62,9 @@
       <step>
         <cmd>If the run fails, review the error details.</cmd>
         <info>
-          <p>Inspect <codeph>error.code</codeph>, <codeph>error.message</codeph>, and <codeph>error.details</codeph>, then decide whether to replay the run.</p>
+          <p>Inspect <codeph>error.code</codeph>, <codeph>error.message</codeph>, and <codeph>error.details</codeph>, then decide whether to <xref href="replay-failed-run.dita">replay the run</xref>.</p>
+          <note type="remember">Always fix the root cause before replaying a failed run. Replaying without
+            remediation will likely produce the same failure.</note>
         </info>
       </step>
     </steps>
@@ -49,4 +73,22 @@
       <p>You can trigger runs and observe their progress.</p>
     </result>
   </taskbody>
+
+  <related-links>
+    <link href="create-sync-job.dita">
+      <linktext>Create a sync job</linktext>
+    </link>
+    <link href="../reference/endpoints-runs.dita">
+      <linktext>Runs API reference</linktext>
+    </link>
+    <link href="../concepts/errors.dita">
+      <linktext>Error handling</linktext>
+    </link>
+    <link href="backfill-date-range.dita">
+      <linktext>Backfill a date range</linktext>
+    </link>
+    <link href="replay-failed-run.dita">
+      <linktext>Replay a failed run</linktext>
+    </link>
+  </related-links>
 </task>

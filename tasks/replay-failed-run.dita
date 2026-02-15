@@ -4,6 +4,21 @@
   <title>Replay a failed run</title>
   <shortdesc>Replay a run after fixing a transient issue such as credentials or network instability.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>replay</keyword>
+        <keyword>failed run</keyword>
+        <keyword>retry</keyword>
+        <keyword>troubleshooting</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <taskbody>
     <prereq>
       <ul>
@@ -12,16 +27,23 @@
       </ul>
     </prereq>
 
+    <context>
+      <p>A replay re-executes a previous run using the same job configuration and parameters. This is
+        useful when a run failed due to a transient issue — for example, expired credentials, a brief
+        network outage, or a temporary permissions error — and you have already resolved the root cause.
+        Review the <xref href="../concepts/errors.dita">error details</xref> to identify the failure before replaying.</p>
+    </context>
+
     <steps>
       <step>
         <cmd>Create a replay request for the run.</cmd>
-        <codeblock>curl -s \
+        <info><codeblock>curl -s \
   -X POST \
   -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: 1a8a1de2-9d1a-4f5a-9d59-2c0d5d9b7d1a" \
   -d '{ "reason": "replay_after_fix" }' \
-  "https://api.datasync.example.com/v1/runs/run_456/replay"</codeblock>
+  "https://api.datasync.example.com/v1/runs/run_456/replay"</codeblock></info>
       </step>
 
       <step>
@@ -30,6 +52,10 @@
 
       <step>
         <cmd>Monitor the new run to completion.</cmd>
+        <info>
+          <note type="important">The replay creates an entirely new run with its own <codeph>run_id</codeph>.
+            The original failed run is not modified.</note>
+        </info>
       </step>
     </steps>
 
@@ -37,4 +63,16 @@
       <p>The service has created a new run based on the original run configuration.</p>
     </result>
   </taskbody>
+
+  <related-links>
+    <link href="run-job-check-status.dita">
+      <linktext>Run a job and check status</linktext>
+    </link>
+    <link href="../reference/endpoints-runs.dita">
+      <linktext>Runs API reference</linktext>
+    </link>
+    <link href="../concepts/errors.dita">
+      <linktext>Error handling</linktext>
+    </link>
+  </related-links>
 </task>

@@ -4,6 +4,21 @@
   <title>Quickstart: call the API</title>
   <shortdesc>Make your first authenticated request and list jobs.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>quickstart</keyword>
+        <keyword>getting started</keyword>
+        <keyword>curl</keyword>
+        <keyword>API key</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <taskbody>
     <prereq>
       <ul>
@@ -12,18 +27,23 @@
       </ul>
     </prereq>
 
+    <context>
+      <p>Use this quickstart to verify that your API key is valid and that you can reach the Data Sync Service.
+        After completing these steps you will be ready to create connectors and sync jobs.</p>
+    </context>
+
     <steps>
       <step>
         <cmd>Set your API key as an environment variable.</cmd>
-        <codeblock>export DATA_SYNC_API_KEY="YOUR_API_KEY"</codeblock>
+        <info><codeblock>export DATA_SYNC_API_KEY="YOUR_API_KEY"</codeblock></info>
       </step>
 
       <step>
         <cmd>Call the jobs list endpoint.</cmd>
-        <codeblock>curl -s \
+        <info><codeblock>curl -s \
   -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
   -H "Accept: application/json" \
-  "https://api.datasync.example.com/v1/jobs?limit=10"</codeblock>
+  "https://api.datasync.example.com/v1/jobs?limit=10"</codeblock></info>
       </step>
 
       <step>
@@ -38,4 +58,16 @@
       <p>You have successfully authenticated and called the Data Sync Service API.</p>
     </result>
   </taskbody>
+
+  <related-links>
+    <link href="../concepts/authentication.dita">
+      <linktext>Authentication</linktext>
+    </link>
+    <link href="../reference/endpoints-jobs.dita">
+      <linktext>Jobs API reference</linktext>
+    </link>
+    <link href="create-sync-job.dita">
+      <linktext>Create a sync job</linktext>
+    </link>
+  </related-links>
 </task>

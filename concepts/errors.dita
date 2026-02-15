@@ -4,12 +4,27 @@
   <title>Error handling</title>
   <shortdesc>The API returns standard HTTP status codes and a consistent JSON error body.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>error handling</keyword>
+        <keyword>status codes</keyword>
+        <keyword>rate limit</keyword>
+        <keyword>retry</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <conbody>
     <section>
       <title>Status codes</title>
       <ul>
         <li><b>400</b> Bad request (invalid JSON, missing required fields)</li>
-        <li><b>401</b> Unauthorized (missing/invalid API key)</li>
+        <li><b>401</b> Unauthorized (missing/invalid <xref href="authentication.dita">API key</xref>)</li>
         <li><b>403</b> Forbidden (key lacks required permissions)</li>
         <li><b>404</b> Not found (resource does not exist)</li>
         <li><b>409</b> Conflict (idempotency conflict or invalid state transition)</li>
@@ -22,21 +37,26 @@
     <section>
       <title>Error response schema</title>
       <p>Errors use a consistent JSON body:</p>
-      <codeblock>{
-  "error": {
-    "code": "validation_error",
-    "message": "One or more fields are invalid.",
-    "details": [
-      { "field": "name", "issue": "must not be empty" }
-    ],
-    "request_id": "req_8a1d0c..."
-  }
-}</codeblock>
+      <codeblock conref="../shared/reusable-content.dita#reusable-content/error-response-json"/>
     </section>
 
     <section>
       <title>Rate limits and retries</title>
       <p>On HTTP 429, respect <codeph>Retry-After</codeph> and apply exponential backoff with jitter.</p>
+      <note type="tip">A simple backoff strategy is to wait <codeph>min(2^attempt * 100ms, 30s)</codeph> plus
+        a random jitter of up to 500 ms between retries.</note>
     </section>
   </conbody>
+
+  <related-links>
+    <link href="authentication.dita">
+      <linktext>Authentication</linktext>
+    </link>
+    <link href="../reference/schemas.dita">
+      <linktext>Resource schemas</linktext>
+    </link>
+    <link href="../tasks/replay-failed-run.dita">
+      <linktext>Replay a failed run</linktext>
+    </link>
+  </related-links>
 </concept>

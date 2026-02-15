@@ -7,6 +7,21 @@
     operational systems to a data warehouse) with observability, retries, and idempotency.
   </shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>overview</keyword>
+        <keyword>data sync</keyword>
+        <keyword>API</keyword>
+        <keyword>ETL</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <conbody>
     <section>
       <title>Who this documentation is for</title>
@@ -21,29 +36,41 @@
     <section>
       <title>Base URL and versioning</title>
       <p>All endpoints are prefixed with:</p>
-      <codeblock>https://api.datasync.example.com/v1</codeblock>
+      <codeblock conref="../shared/reusable-content.dita#reusable-content/base-url"/>
       <p>Versioning uses a URI prefix (<codeph>/v1</codeph>). Breaking changes are introduced only in new major versions.</p>
     </section>
 
     <section>
       <title>API design highlights</title>
       <ul>
-        <li><b>Idempotent writes:</b> create and update operations support <codeph>Idempotency-Key</codeph>.</li>
+        <li><b>Idempotent writes:</b> create and update operations support <codeph>Idempotency-Key</codeph>. See <xref href="authentication.dita">Authentication</xref>.</li>
         <li><b>Async runs:</b> job execution is asynchronous; poll run status or subscribe to webhooks (optional).</li>
         <li><b>Operational visibility:</b> runs include structured error details and timing metrics.</li>
-        <li><b>Rate limits:</b> consistent limits per API key; clients should implement backoff on HTTP 429.</li>
+        <li><b>Rate limits:</b> consistent limits per API key; clients should implement backoff on HTTP 429. See <xref href="errors.dita">Error handling</xref>.</li>
       </ul>
     </section>
 
     <section>
       <title>Example workflow</title>
       <ol>
-        <li>Create a connector for a source system.</li>
+        <li><xref href="../reference/endpoints-connectors.dita">Create a connector</xref> for a source system.</li>
         <li>Create a connector for a target (warehouse).</li>
-        <li>Create a sync job referencing both connectors.</li>
-        <li>Run the job and monitor the run status.</li>
-        <li>Backfill or replay runs when needed.</li>
+        <li><xref href="../tasks/create-sync-job.dita">Create a sync job</xref> referencing both connectors.</li>
+        <li><xref href="../tasks/run-job-check-status.dita">Run the job</xref> and monitor the run status.</li>
+        <li><xref href="../tasks/backfill-date-range.dita">Backfill</xref> or <xref href="../tasks/replay-failed-run.dita">replay</xref> runs when needed.</li>
       </ol>
     </section>
   </conbody>
+
+  <related-links>
+    <link href="core-concepts.dita">
+      <linktext>Core concepts</linktext>
+    </link>
+    <link href="authentication.dita">
+      <linktext>Authentication</linktext>
+    </link>
+    <link href="../tasks/quickstart-call-api.dita">
+      <linktext>Quickstart: call the API</linktext>
+    </link>
+  </related-links>
 </concept>

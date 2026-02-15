@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="reusable-content" xml:lang="en-us">
+  <title>Reusable content warehouse</title>
+  <shortdesc>This topic holds reusable content fragments referenced via conref. It is not published directly.</shortdesc>
+
+  <conbody>
+
+    <!-- Base URL -->
+    <section id="section-base-url">
+      <title>Base URL</title>
+      <codeblock id="base-url">https://api.datasync.example.com/v1</codeblock>
+    </section>
+
+    <!-- Idempotency explanation (paragraph pair) -->
+    <section id="section-idempotency">
+      <title>Idempotency</title>
+      <p id="idempotency-description">For create/update operations, provide an <codeph>Idempotency-Key</codeph> header to safely retry requests.
+        Keys are scoped to an endpoint and expire after 24 hours.</p>
+    </section>
+
+    <!-- Idempotency short reminder for endpoint references -->
+    <section id="section-idempotency-short">
+      <title>Idempotency reminder</title>
+      <p><ph id="idempotency-short">Use <codeph>Idempotency-Key</codeph> for safe retries.</ph></p>
+    </section>
+
+    <!-- Error response JSON -->
+    <section id="section-error-response">
+      <title>Error response</title>
+      <codeblock id="error-response-json">{
+  "error": {
+    "code": "validation_error",
+    "message": "One or more fields are invalid.",
+    "details": [
+      { "field": "name", "issue": "must not be empty" }
+    ],
+    "request_id": "req_8a1d0c..."
+  }
+}</codeblock>
+    </section>
+
+  </conbody>
+</concept>

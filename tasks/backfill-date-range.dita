@@ -4,6 +4,21 @@
   <title>Backfill a date range</title>
   <shortdesc>Run a job over historical data for a specific time range.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>backfill</keyword>
+        <keyword>historical data</keyword>
+        <keyword>date range</keyword>
+        <keyword>incremental override</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <taskbody>
     <prereq>
       <ul>
@@ -12,10 +27,17 @@
       </ul>
     </prereq>
 
+    <context>
+      <p><xref href="../concepts/core-concepts.dita">Incremental jobs</xref> normally sync only the latest changes since the last run. A backfill overrides
+        this behavior and re-syncs all data within a specified time range. Common scenarios include
+        populating a new target table, recovering from data corruption, or onboarding historical data
+        after adding a new mapping.</p>
+    </context>
+
     <steps>
       <step>
         <cmd>Create a backfill run specifying the time range.</cmd>
-        <codeblock>curl -s \
+        <info><codeblock>curl -s \
   -X POST \
   -H "Authorization: Bearer $DATA_SYNC_API_KEY" \
   -H "Content-Type: application/json" \
@@ -28,13 +50,14 @@
       "end":   "2026-01-31T23:59:59Z"
     }
   }' \
-  "https://api.datasync.example.com/v1/jobs/job_123/runs"</codeblock>
+  "https://api.datasync.example.com/v1/jobs/job_123/runs"</codeblock></info>
       </step>
 
       <step>
         <cmd>Monitor the run until it completes.</cmd>
         <info>
-          <p>Backfills can take longer than incremental runs. Consider a higher polling interval (for example, 30–60 seconds).</p>
+          <note type="tip">Backfills can take significantly longer than incremental runs. Use a higher polling
+            interval (for example, 30–60 seconds) to reduce unnecessary API calls.</note>
         </info>
       </step>
     </steps>
@@ -43,4 +66,16 @@
       <p>The job has synchronized historical data for the specified range.</p>
     </result>
   </taskbody>
+
+  <related-links>
+    <link href="run-job-check-status.dita">
+      <linktext>Run a job and check status</linktext>
+    </link>
+    <link href="../reference/endpoints-runs.dita">
+      <linktext>Runs API reference</linktext>
+    </link>
+    <link href="replay-failed-run.dita">
+      <linktext>Replay a failed run</linktext>
+    </link>
+  </related-links>
 </task>

@@ -4,6 +4,21 @@
   <title>Pagination and filtering</title>
   <shortdesc>List endpoints support cursor pagination and basic filtering and sorting.</shortdesc>
 
+  <prolog>
+    <author>Ramiro Luz Vergolino Zahlouth</author>
+    <critdates>
+      <created date="2026-02-15"/>
+    </critdates>
+    <metadata>
+      <keywords>
+        <keyword>pagination</keyword>
+        <keyword>cursor</keyword>
+        <keyword>filtering</keyword>
+        <keyword>sorting</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+
   <conbody>
     <section>
       <title>Cursor pagination</title>
@@ -28,4 +43,16 @@
       <codeblock>GET /v1/runs?sort=created_at:desc</codeblock>
     </section>
   </conbody>
+
+  <related-links>
+    <link href="../reference/endpoints-jobs.dita">
+      <linktext>Jobs API reference</linktext>
+    </link>
+    <link href="../reference/endpoints-runs.dita">
+      <linktext>Runs API reference</linktext>
+    </link>
+    <link href="../reference/endpoints-connectors.dita">
+      <linktext>Connectors API reference</linktext>
+    </link>
+  </related-links>
 </concept>
